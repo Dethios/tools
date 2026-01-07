@@ -28,12 +28,21 @@ if (Test-Path $configPath) {
     }
 }
 
-& (Join-Path $scriptDir 'workspace-pull.ps1') -Root $root
+try {
+    & (Join-Path $scriptDir 'workspace-pull.ps1') -Root $root
+} catch {
+    Write-Warning "workspace-pull failed: $($_.Exception.Message)"
+}
 
-if (-not $IsWindows) {
-    if (Get-Command apt-get -ErrorAction SilentlyContinue) {
-        sudo /usr/bin/apt-get update
-        sudo /usr/bin/apt-get -y upgrade
+$isWindows = $IsWindows -or ($env:OS -eq 'Windows_NT')
+if (-not $isWindows) {
+    if ((Get-Command apt-get -ErrorAction SilentlyContinue) -and (Get-Command sudo -ErrorAction SilentlyContinue)) {
+        try {
+            sudo /usr/bin/apt-get update
+            sudo /usr/bin/apt-get -y upgrade
+        } catch {
+            Write-Warning "apt-get update failed: $($_.Exception.Message)"
+        }
     }
 
     $tlmgr = (Get-Command tlmgr -ErrorAction SilentlyContinue | Select-Object -First 1).Source
@@ -42,37 +51,73 @@ if (-not $IsWindows) {
             if (-not $tlmgr -and $_.FullName) { $tlmgr = $_.FullName }
         }
     }
-    if ($tlmgr) {
-        sudo $tlmgr update --self --all
+    if ($tlmgr -and (Get-Command sudo -ErrorAction SilentlyContinue)) {
+        try {
+            sudo $tlmgr update --self --all
+        } catch {
+            Write-Warning "tlmgr update failed: $($_.Exception.Message)"
+        }
     }
 
     if (Get-Command brew -ErrorAction SilentlyContinue) {
-        brew update
-        brew upgrade
+        try {
+            brew update
+            brew upgrade
+        } catch {
+            Write-Warning "brew update failed: $($_.Exception.Message)"
+        }
     }
 } else {
     if (Get-Command winget -ErrorAction SilentlyContinue) {
-        winget upgrade --all --accept-source-agreements --accept-package-agreements
+        try {
+            winget upgrade --all --accept-source-agreements --accept-package-agreements
+        } catch {
+            Write-Warning "winget upgrade failed: $($_.Exception.Message)"
+        }
     }
 }
 
 if (Get-Command corepack -ErrorAction SilentlyContinue) {
-    corepack enable
-    corepack prepare pnpm@latest --activate
-    corepack prepare yarn@stable --activate
+    try {
+        corepack enable
+        corepack prepare pnpm@latest --activate
+        corepack prepare yarn@stable --activate
+    } catch {
+        Write-Warning "corepack update failed: $($_.Exception.Message)"
+    }
 }
 if (Get-Command npm -ErrorAction SilentlyContinue) {
-    npm -g update
+    try {
+        npm -g update
+    } catch {
+        Write-Warning "npm update failed: $($_.Exception.Message)"
+    }
 }
 if ((Get-Command pnpm -ErrorAction SilentlyContinue) -and -not (Get-Command corepack -ErrorAction SilentlyContinue)) {
-    pnpm -g add pnpm@latest
+    try {
+        pnpm -g add pnpm@latest
+    } catch {
+        Write-Warning "pnpm update failed: $($_.Exception.Message)"
+    }
 }
 
 if (Get-Command pipx -ErrorAction SilentlyContinue) {
-    pipx upgrade-all
+    try {
+        pipx upgrade-all
+    } catch {
+        Write-Warning "pipx update failed: $($_.Exception.Message)"
+    }
 }
 if (Get-Command rustup -ErrorAction SilentlyContinue) {
-    rustup update
+    try {
+        rustup update
+    } catch {
+        Write-Warning "rustup update failed: $($_.Exception.Message)"
+    }
 }
 
-& (Join-Path $scriptDir 'scrub.ps1') -Root $root
+try {
+    & (Join-Path $scriptDir 'scrub.ps1') -Root $root
+} catch {
+    Write-Warning "scrub failed: $($_.Exception.Message)"
+}
