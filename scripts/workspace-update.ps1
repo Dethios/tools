@@ -101,6 +101,14 @@ if ((Get-Command pnpm -ErrorAction SilentlyContinue) -and -not (Get-Command core
     }
 }
 
+if (Get-Command go -ErrorAction SilentlyContinue) {
+    try {
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+    } catch {
+        Write-Warning "shfmt update failed: $($_.Exception.Message)"
+    }
+}
+
 if (Get-Command pipx -ErrorAction SilentlyContinue) {
     try {
         pipx upgrade-all

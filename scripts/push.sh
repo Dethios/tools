@@ -17,7 +17,7 @@ if [[ "$ROOT" != /* ]]; then
 fi
 
 # Config
-DEFAULT_MSG="Auto-commit: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+DEFAULT_MSG="Auto-commit: $(date -u +'%Y-%m-%d')"
 BRANCH="$(git -C "$ROOT" rev-parse --abbrev-ref HEAD 2> /dev/null || echo main)"
 CONFIG_PATH="${SETTINGS_CONFIG:-$ROOT/settings_sources.json}"
 

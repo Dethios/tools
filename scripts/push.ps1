@@ -18,7 +18,7 @@ if ($args.Count -ge 2 -and $args[0] -eq '--root') {
 $root = Resolve-Path $root
 
 # Config
-$defaultMsg = "Auto-commit: $((Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss 'UTC'"))"
+$defaultMsg = "Auto-commit: $((Get-Date).ToUniversalTime().ToString("yyyy-MM-dd"))"
 try {
     $branch = (git -C $root rev-parse --abbrev-ref HEAD 2>$null).Trim()
     if (-not $branch) { $branch = 'main' }
