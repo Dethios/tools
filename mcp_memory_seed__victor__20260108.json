@@ -1,0 +1,387 @@
+{
+  "chat_context": {
+    "chat_summary": {
+      "generated_at": "2026-01-08T00:00:00Z",
+      "known_topics": [
+        "User asked whether open-source models can have long-term memory like ChatGPT/Claude/Gemini.",
+        "Assistant explained: long-term memory is typically an external system (store + retrieval) rather than model weight updates.",
+        "Assistant proposed an MCP-based memory architecture: document truth (file-first) + structured memory store + vector search + policy engine + MCP tools/resources.",
+        "User requested: a Codex Agent prompt to generate the MCP memory system and an export of known memory/context to seed the server."
+      ],
+      "not_included": [
+        "No full workspace document contents were provided beyond ai_context.zip git metadata.",
+        "No personal identifiers beyond those explicitly provided by user profile were added."
+      ]
+    }
+  },
+  "generated_at": "2026-01-08T00:00:00Z",
+  "schema_version": "mcp-memory-seed.v1",
+  "seed_memories": [
+    {
+      "confidence": 1.0,
+      "content": "User prefers to be addressed as Victor.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "2da73d7fb8c617fbc2148c2ade9634a9aa71c046e62be64eb2dd1cc6c240b4ba",
+      "memory_id": "mem_user_preferred_name",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "identity",
+        "preference"
+      ],
+      "title": "Preferred name",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "User role: Military acquisitions.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "2eddf492040fba79ecafebf70ad9bdb1d35a3259be528f98b71228dd908b0695",
+      "memory_id": "mem_user_role",
+      "privacy": "medium",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "profile"
+      ],
+      "title": "User role",
+      "ttl_days": null,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "User maintains five domains/projects in ChatGPT web: product-research, recipes, car-care, personal-finance, 3d-printing.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "40a8618b787993668bf32428ec5a5e7ec58d1b065571dbaefcddd67a999b213f",
+      "memory_id": "mem_user_projects_list",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "projects",
+        "workflow"
+      ],
+      "title": "User ChatGPT project domains",
+      "ttl_days": null,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Within a Project, the Project\u2019s files are the source of truth; prefer reading manifest.json, adapter JSON, and library_index.json before deep work.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "379d2c8e17decc60879d667a36782cf3d706c1781deefebaee290e5da2b0d775",
+      "memory_id": "mem_project_files_source_of_truth",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "workflow",
+        "projects",
+        "governance"
+      ],
+      "title": "Project files are source of truth",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Each Project has: manifest.json, library_index.json, and exactly one adapter JSON (e.g., iac.gpt.research_analysis.v1). Adapters define defaults.collection and schemas.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "2bd3882bef71782cbf18da7f88338d5bdd8e969d1de292c9a480231d4fe131fc",
+      "memory_id": "mem_project_structure_adapters",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "workflow",
+        "projects",
+        "schema"
+      ],
+      "title": "Project structure conventions",
+      "ttl_days": null,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "When the user says \u201csave/add/update\u201d, generate a normalized JSON record (op, adapter, collection, key, record_type, payload, provenance, optional hash_sha256) and offer a file named <collection>__<key>__YYYYMMDD.json plus an optional tiny library_index patch.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "003692cc5dd570220f98e78e9b90f41602520f4f8f5b4cac17d33e79c58284f8",
+      "memory_id": "mem_saving_via_json_files",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "workflow",
+        "saving",
+        "json"
+      ],
+      "title": "Saving workflow via JSON file generation",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Prefer minimal data collection; avoid sensitive identifiers unless user provides them; keep outputs share-safe.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "c9eda6f6bad7022e6c5a0ed21fc803addc25cbde5747b32960d60b4882e6ace2",
+      "memory_id": "mem_privacy_minimal_collection",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "privacy"
+      ],
+      "title": "Privacy preference: minimal data collection",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Prefer primary sources and official docs; for product info also prefer Consumer Reports, Wirecutter, reputable government/standards sources; credible Reddit threads can be used cautiously when synthesizing user reviews; cite clearly.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "5683339fa913113022a257c1ae47edf0578e9f0f2957f40c8042314fc0400be0",
+      "memory_id": "mem_citation_preferences",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "citations",
+        "sources"
+      ],
+      "title": "Citation/source preferences",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "For critical numbers, do careful explicit calculations (digit-by-digit where appropriate), show working, and state assumptions/uncertainty.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "84b358acf37de3a4de84ca5586e605ec82afc3f44ddbfa1e147773f459bc8db2",
+      "memory_id": "mem_math_accuracy_preference",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "math",
+        "accuracy"
+      ],
+      "title": "Math/accuracy preference",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Use the active Project\u2019s timezone if specified by its files; otherwise assume the user\u2019s local time. Use absolute dates to clarify relative terms like \u201ctoday/this week.\u201d",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "86306fa85a50018e1e201e07390eba50c682d177d489cce5b8cfea068300a654",
+      "memory_id": "mem_time_date_handling",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "time",
+        "dates"
+      ],
+      "title": "Time/date handling preference",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Default response format: 5\u20138 line executive summary first, then structured details (tables/bullets/metrics). Flag biases, missing data, and opposing views.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "73c5ba2a8e73f03471d36579cd3bf80697fa2ab3edf4fe9a927476dff59dd458",
+      "memory_id": "mem_output_structure_preference",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "format",
+        "writing"
+      ],
+      "title": "Output structure preference",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 1.0,
+      "content": "Ask up to 2 targeted clarifying questions only when essential; otherwise proceed with explicit assumptions.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "bddd5960474f493f33d66bda82c3e389bb1008fb834eb2a7286e3b131cc23f60",
+      "memory_id": "mem_clarifying_question_limit",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "user_profile"
+      },
+      "scope": "global",
+      "tags": [
+        "workflow",
+        "communication"
+      ],
+      "title": "Clarifying questions limit",
+      "ttl_days": null,
+      "type": "preference",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 0.9,
+      "content": "User wants an MCP-based memory system for their workspace and an instruction prompt to run with Codex Agent to generate it.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "01ec9426791ba76eda1c28b7a130251b0eb256d5732def8261b664485a518aa0",
+      "memory_id": "mem_current_goal_mcp_memory_system",
+      "privacy": "low",
+      "project_id": "global",
+      "provenance": {
+        "source": "chat"
+      },
+      "scope": "global",
+      "tags": [
+        "goal",
+        "mcp",
+        "agents"
+      ],
+      "title": "Current goal",
+      "ttl_days": 30,
+      "type": "goal",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 0.8,
+      "content": "Workspace git repo root reported in context bundle: /home/victor/dev-workspace (bundle created 2026-01-07T12:00:38Z UTC).",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "51a1e5b86ed78767e522d16a8bfa014566fc4b7eeb4fa840438e54a39bc2c3bb",
+      "memory_id": "mem_workspace_repo_root",
+      "privacy": "medium",
+      "project_id": "global",
+      "provenance": {
+        "file": "context/manifest.txt",
+        "source": "ai_context.zip"
+      },
+      "scope": "global",
+      "tags": [
+        "workspace",
+        "repo"
+      ],
+      "title": "Workspace repo root (from context bundle)",
+      "ttl_days": 14,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 0.8,
+      "content": "Context bundle reports git HEAD commit: 2953233d362430fe782905b3fa4edd505d36e785.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "61a571c528a36bea5815770dfa4754f660c06d926156fdde55dd28f89a3e6ac4",
+      "memory_id": "mem_workspace_git_head",
+      "privacy": "medium",
+      "project_id": "global",
+      "provenance": {
+        "file": "context/git_head.txt",
+        "source": "ai_context.zip"
+      },
+      "scope": "global",
+      "tags": [
+        "workspace",
+        "git"
+      ],
+      "title": "Workspace git HEAD (from context bundle)",
+      "ttl_days": 14,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 0.8,
+      "content": "Context bundle indicates modified path: projects/journal; and untracked: scratch/ai_context.U7m3QL/.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "3cc03d9fc7458b932b8f1d4db508c47fed96c344882790091b997d5d295e16d3",
+      "memory_id": "mem_workspace_git_status_notes",
+      "privacy": "medium",
+      "project_id": "global",
+      "provenance": {
+        "file": "context/git_status.txt",
+        "source": "ai_context.zip"
+      },
+      "scope": "global",
+      "tags": [
+        "workspace",
+        "git",
+        "status"
+      ],
+      "title": "Workspace git status notes (from context bundle)",
+      "ttl_days": 14,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    },
+    {
+      "confidence": 0.8,
+      "content": "Context bundle diff shows subproject commit for projects/journal changed from 999a837dad4c0ef872c7a6f4b361636cdfa2d5e4 to 31241bc71b4a1948e6716134fa3f567c3aa248ae.",
+      "created_at": "2026-01-08T00:00:00Z",
+      "hash_sha256": "292138726ad4de3ac3e37e2a014f8deb9e79309950e85c78788d512207af69ee",
+      "memory_id": "mem_workspace_journal_submodule_change",
+      "privacy": "medium",
+      "project_id": "global",
+      "provenance": {
+        "file": "context/git_diff.patch",
+        "source": "ai_context.zip"
+      },
+      "scope": "global",
+      "tags": [
+        "workspace",
+        "git",
+        "submodule"
+      ],
+      "title": "Journal submodule pointer changed (from context bundle)",
+      "ttl_days": 14,
+      "type": "fact",
+      "updated_at": "2026-01-08T00:00:00Z"
+    }
+  ],
+  "source": "chat_export"
+}
