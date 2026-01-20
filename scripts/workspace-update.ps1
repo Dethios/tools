@@ -34,8 +34,8 @@ try {
     Write-Warning "workspace-pull failed: $($_.Exception.Message)"
 }
 
-$isWindows = $IsWindows -or ($env:OS -eq 'Windows_NT')
-if (-not $isWindows) {
+$isWindowsOS = $IsWindows -or ($env:OS -eq 'Windows_NT')
+if (-not $isWindowsOS) {
     if ((Get-Command apt-get -ErrorAction SilentlyContinue) -and (Get-Command sudo -ErrorAction SilentlyContinue)) {
         try {
             sudo /usr/bin/apt-get update
@@ -100,6 +100,11 @@ if ((Get-Command pnpm -ErrorAction SilentlyContinue) -and -not (Get-Command core
         Write-Warning "pnpm update failed: $($_.Exception.Message)"
     }
 }
+
+pnpm -g add @openai/codex
+pnpm -g add @google/gemini-cli
+pnpm -g add gh
+pnpm -g update
 
 if (Get-Command go -ErrorAction SilentlyContinue) {
     try {

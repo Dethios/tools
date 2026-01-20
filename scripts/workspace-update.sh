@@ -69,6 +69,11 @@ if command -v pnpm >/dev/null 2>&1 && ! command -v corepack >/dev/null 2>&1; the
 	pnpm -g add pnpm@latest || true
 fi
 
+pnpm -g add @openai/codex
+pnpm -g add @google/gemini-cli
+pnpm -g add gh
+pnpm -g update
+
 # Go tools
 if command -v go >/dev/null 2>&1; then
 	go install mvdan.cc/sh/v3/cmd/shfmt@latest || true
