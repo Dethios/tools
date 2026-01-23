@@ -1,0 +1,76 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: "Roo Code Modes - Config (.roomodes / custom_modes.yaml)"
+type: object
+required: [customModes]
+additionalProperties: false
+
+properties:
+  customModes:
+    type: array
+    minItems: 1
+    items:
+      $ref: "#/$defs/mode"
+
+$defs:
+  mode:
+    type: object
+    required: [slug, name, roleDefinition, groups]
+    additionalProperties: false
+    properties:
+      slug:
+        type: string
+        minLength: 1
+        pattern: "^[a-zA-Z0-9-]+$"
+
+      name:
+        type: string
+        minLength: 1
+
+      description:
+        type: string
+
+      roleDefinition:
+        type: string
+        minLength: 1
+
+      whenToUse:
+        type: string
+
+      customInstructions:
+        type: string
+
+      groups:
+        type: array
+        minItems: 1
+        items:
+          $ref: "#/$defs/groupEntry"
+
+      # In config files, rules are normally loaded from the filesystem
+      # (.roo/rules-{slug}/ or ~/.roo/rules-{slug}/), not embedded.
+      rulesFiles:
+        not: {}
+        description: "Not allowed in config files; only used in export bundles."
+
+  groupEntry:
+    oneOf:
+      - type: string
+        enum: ["read", "edit", "browser", "command", "mcp"]
+      - type: array
+        minItems: 2
+        maxItems: 2
+        prefixItems:
+          - type: string
+            enum: ["edit"]
+          - $ref: "#/$defs/editRestriction"
+        items: false
+
+  editRestriction:
+    type: object
+    required: [fileRegex]
+    additionalProperties: false
+    properties:
+      fileRegex:
+        type: string
+        minLength: 1
+      description:
+        type: string
