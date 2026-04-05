@@ -23,17 +23,6 @@ if command -v sudo >/dev/null 2>&1; then
 	sudo -v || true
 fi
 
-# Sync VS Code settings if config exists
-if [[ -f "$CONFIG_PATH" ]]; then
-	if command -v python3 >/dev/null 2>&1; then
-		python3 "$SCRIPT_DIR/settings_manager.py" --config "$CONFIG_PATH" sync || true
-	elif command -v python >/dev/null 2>&1; then
-		python "$SCRIPT_DIR/settings_manager.py" --config "$CONFIG_PATH" sync || true
-	else
-		echo "settings sync skipped: python not found" >&2
-	fi
-fi
-
 "$SCRIPT_DIR/workspace-pull.sh" --root "$ROOT" || true
 
 # System package updates
@@ -69,10 +58,11 @@ if command -v pnpm >/dev/null 2>&1 && ! command -v corepack >/dev/null 2>&1; the
 	pnpm -g add pnpm@latest || true
 fi
 
-pnpm -g add @openai/codex
-pnpm -g add @google/gemini-cli
-pnpm -g add gh
-pnpm -g update
+pnpm -g self-update || true
+pnpm -g env use latest || true
+pnpm -g update --latest || true
+
+
 
 # Go tools
 if command -v go >/dev/null 2>&1; then
