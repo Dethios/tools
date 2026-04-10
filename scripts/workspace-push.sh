@@ -16,10 +16,47 @@ if [[ "$ROOT" != /* ]]; then
 	ROOT="$(cd "$ROOT" && pwd)"
 fi
 
-"$SCRIPT_DIR/push.sh" --root "$ROOT" "$@"
+list_repos() {
+	find "$ROOT" \( -name .git -type d -o -name .git -type f \) -prune -print |
+		sed 's#/\.git$##' |
+		sort -u
+}
 
-if git -C "$ROOT" submodule status --recursive >/dev/null 2>&1; then
-	TOOLS_PUSH="$SCRIPT_DIR/push.sh"
-	export TOOLS_PUSH
-	git -C "$ROOT" submodule foreach --recursive '$TOOLS_PUSH --root "$toplevel/$sm_path"'
-fi
+target_branch() {
+	local repo="$1"
+	if git -C "$repo" show-ref --verify --quiet refs/remotes/origin/main; then
+		echo main
+	elif git -C "$repo" show-ref --verify --quiet refs/remotes/origin/master; then
+		echo master
+	else
+		git -C "$repo" branch --show-current
+	fi
+}
+
+push_repo() {
+	local repo="$1"
+	local branch
+
+	if ! git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
+		echo "Skipping $repo (not a git repo)"
+		return 0
+	fi
+
+	if ! git -C "$repo" remote get-url origin >/dev/null 2>&1; then
+		echo "Skipping $repo (no origin remote)"
+		return 0
+	fi
+
+	branch="$(target_branch "$repo")"
+	if [[ "$branch" == "master" ]]; then
+		echo "Skipping push in $repo (origin/master repos are pull-only)"
+		return 0
+	fi
+
+	"$SCRIPT_DIR/push.sh" --root "$repo" "$@"
+}
+
+while IFS= read -r repo; do
+	[[ -n "$repo" ]] || continue
+	push_repo "$repo"
+done < <(list_repos)

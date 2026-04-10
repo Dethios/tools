@@ -10,14 +10,40 @@ if (-not $Root) { $Root = $env:WORKSPACE_ROOT }
 if (-not $Root) { $Root = Join-Path $scriptDir '..' }
 $root = Resolve-Path $Root
 
-& (Join-Path $scriptDir 'push.ps1') --root $root
+function Get-WorkspaceRepos($basePath) {
+    $gitPaths = Get-ChildItem -Path $basePath -Recurse -Force -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -eq '.git' }
+    $repos = $gitPaths | ForEach-Object { $_.DirectoryName } | Sort-Object -Unique
+    return @($repos)
+}
 
-$submoduleLines = git -C $root submodule status --recursive 2>$null
-foreach ($line in $submoduleLines) {
-    $parts = $line.Trim() -split '\s+'
-    if ($parts.Count -lt 2) { continue }
-    $path = $parts[1]
-    $subPath = Join-Path $root $path
-    if (-not (Test-Path $subPath)) { continue }
-    & (Join-Path $scriptDir 'push.ps1') --root $subPath
+function Get-TargetBranch($path) {
+    git -C $path show-ref --verify --quiet 'refs/remotes/origin/main'
+    if ($LASTEXITCODE -eq 0) { return 'main' }
+    git -C $path show-ref --verify --quiet 'refs/remotes/origin/master'
+    if ($LASTEXITCODE -eq 0) { return 'master' }
+    return (git -C $path branch --show-current 2>$null).Trim()
+}
+
+foreach ($repo in (Get-WorkspaceRepos $root)) {
+    if ([string]::IsNullOrWhiteSpace($repo)) { continue }
+
+    if (-not (git -C $repo rev-parse --git-dir *> $null)) {
+        Write-Host "Skipping $repo (not a git repo)"
+        continue
+    }
+
+    git -C $repo remote get-url origin *> $null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Skipping $repo (no origin remote)"
+        continue
+    }
+
+    $branch = Get-TargetBranch $repo
+    if ($branch -eq 'master') {
+        Write-Host "Skipping push in $repo (origin/master repos are pull-only)"
+        continue
+    }
+
+    & (Join-Path $scriptDir 'push.ps1') --root $repo
 }
