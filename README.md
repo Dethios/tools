@@ -1,9 +1,13 @@
 # Tools
 
-Shared workspace tooling scripts for the dev-workspace mono setup.
+Shared tooling area for the workspace.
 
 ## Layout
-- scripts/: shared shell and PowerShell utilities used by the workspace and submodules.
+
+- `schemas/` contains shared schema assets used by workspace tooling.
 
 ## Usage
-These scripts are typically invoked via the root workspace wrappers in `dev-workspace/scripts/`.
+
+- Use root-level `dev-workspace/scripts/` for workspace automation.
+- Treat `tools/` as a lightweight container for reusable schemas and related
+  tooling assets rather than the canonical place to run workspace scripts from.
